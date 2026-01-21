@@ -5,13 +5,13 @@ import org.openqa.selenium.WebDriver;
 public abstract class BasePage {
     static WebDriver driver;
 
-    public static void setDriver(WebDriver wd){
+    public static void setDriver(WebDriver wd) {
         driver = wd;
     }
 
-    public void pausa(int time){
+    public void pausa(int time) {
         try {
-            Thread.sleep(time*1000L);
+            Thread.sleep(time * 1000L);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

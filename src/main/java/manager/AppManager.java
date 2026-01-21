@@ -9,8 +9,9 @@ import java.time.Duration;
 
 public class AppManager {
     private WebDriver driver;
-    public WebDriver getDriver(){
-        return  driver;
+
+    public WebDriver getDriver() {
+        return driver;
     }
 
     @BeforeMethod
@@ -21,9 +22,9 @@ public class AppManager {
 //        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
-@AfterMethod(enabled = false)
-    public  void tearDown(){
-        if (driver!=null)
+    @AfterMethod(enabled = false)
+    public void tearDown() {
+        if (driver != null)
             driver.quit();
-}
+    }
 }
