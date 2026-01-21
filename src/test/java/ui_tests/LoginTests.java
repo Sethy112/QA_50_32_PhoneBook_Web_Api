@@ -2,6 +2,7 @@ package ui_tests;
 
 import dto.User;
 import manager.AppManager;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.BasePage;
 import pages.HomePage;
@@ -29,5 +30,10 @@ public class LoginTests extends AppManager {
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginRegistrationFormWithUser(user);
         loginPage.clickBtnLoginForm();
+        Assert.assertTrue(loginPage.isLoggedInDisplayed());
+        Assert.assertTrue(loginPage.isBtnAdd());
+
+
+
     }
 }

@@ -7,6 +7,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
+import javax.xml.xpath.XPath;
+
 public class LoginPage extends BasePage {
 
     public LoginPage(WebDriver driver) {
@@ -23,6 +25,11 @@ public class LoginPage extends BasePage {
     WebElement btnLoginForm;
     @FindBy(css = "button[name='registration']")
     WebElement btnRegistrationForm;
+    @FindBy(xpath ="//button[text()='Sign Out']")
+    WebElement btnSignOut;
+    @FindBy(xpath = "//a[href='/add']")
+    WebElement btnAdd;
+
 
     public void typeLoginRegistrationForm(String email,
                                           String password) {
@@ -42,6 +49,14 @@ public class LoginPage extends BasePage {
     public void clickBtnRegistrationForm() {
         btnRegistrationForm.click();
     }
+    public boolean isLoggedInDisplayed(){
+        return isElementDisplayed(btnSignOut);
+    }
+    public boolean isBtnAdd(){
+        return isElementDisplayed(btnSignOut);
+    }
+
+
 
 
 
