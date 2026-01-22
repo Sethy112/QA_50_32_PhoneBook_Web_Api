@@ -27,7 +27,7 @@ public class LoginPage extends BasePage {
     WebElement btnRegistrationForm;
     @FindBy(xpath ="//button[text()='Sign Out']")
     WebElement btnSignOut;
-    @FindBy(xpath = "//a[href='/add']")
+    @FindBy(xpath = "//a[@href='/add']")
     WebElement btnAdd;
 
 
@@ -53,7 +53,7 @@ public class LoginPage extends BasePage {
         return isElementDisplayed(btnSignOut);
     }
     public boolean isBtnAdd(){
-        return isElementDisplayed(btnSignOut);
+        return isElementDisplayed(btnAdd);
     }
 
 

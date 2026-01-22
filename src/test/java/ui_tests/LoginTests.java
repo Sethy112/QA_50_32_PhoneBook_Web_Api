@@ -19,6 +19,7 @@ public class LoginTests extends AppManager {
         loginPage.typeLoginRegistrationForm("login@yoho.com",
                 "Password123!");
         loginPage.clickBtnLoginForm();
+               Assert.assertTrue(loginPage.isLoggedInDisplayed());
     }
 
     @Test
@@ -32,6 +33,7 @@ public class LoginTests extends AppManager {
         loginPage.clickBtnLoginForm();
         Assert.assertTrue(loginPage.isLoggedInDisplayed());
         Assert.assertTrue(loginPage.isBtnAdd());
+
 
 
 
