@@ -1,13 +1,17 @@
 package pages;
 
 import dto.User;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.xml.xpath.XPath;
+import java.time.Duration;
 
 public class LoginPage extends BasePage {
 
@@ -25,7 +29,7 @@ public class LoginPage extends BasePage {
     WebElement btnLoginForm;
     @FindBy(css = "button[name='registration']")
     WebElement btnRegistrationForm;
-    @FindBy(xpath ="//button[text()='Sign Out']")
+    @FindBy(xpath = "//button[text()='Sign Out']")
     WebElement btnSignOut;
     @FindBy(xpath = "//a[@href='/add']")
     WebElement btnAdd;
@@ -37,7 +41,7 @@ public class LoginPage extends BasePage {
         inputPassword.sendKeys(password);
     }
 
-    public void typeLoginRegistrationFormWithUser(User user){
+    public void typeLoginRegistrationFormWithUser(User user) {
         inputEmail.sendKeys(user.getUsername());
         inputPassword.sendKeys(user.getPassword());
     }
@@ -48,25 +52,25 @@ public class LoginPage extends BasePage {
 
     public void clickBtnRegistrationForm() {
         btnRegistrationForm.click();
+
     }
-    public boolean isLoggedInDisplayed(){
+
+    public boolean isLoggedInDisplayed() {
         return isElementDisplayed(btnSignOut);
     }
-    public boolean isBtnAdd(){
+
+    public boolean isBtnAdd() {
         return isElementDisplayed(btnAdd);
     }
 
-
-
-
-
-
-
-
-
-
-
-
+    public String closeAlertReturnText() {
+        Alert alert = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.alertIsPresent());
+        String text = alert.getText();
+        alert.accept();
+        return text;
+    }
 
 
 }
+
