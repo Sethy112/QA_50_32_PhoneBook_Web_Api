@@ -46,4 +46,34 @@ public class RegistrationTests extends AppManager {
 
     }
 
+    @Test
+    public void regictrationNefativeTestisBlank() {
+        User user = new User(" ", " ");
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.typeLoginRegistrationFormWithUser(user);
+        loginPage.clickBtnLoginForm();
+        Assert.assertEquals(loginPage.closeAlertReturnText(),
+                "Wrong email or password");
+    }
+
+    @Test
+    public void registrationNegativeTestWithTwoDots() {
+        User user = new User("login@yoho..com", "Password123!");
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.typeLoginRegistrationFormWithUser(user);
+        loginPage.clickBtnLoginForm();
+//        Assert.assertTrue(loginPage.
+//                isTextPresentCode401("401"));
+        Assert.assertEquals(loginPage.closeAlertReturnText(),
+                "Wrong email or password");
+    }
+    @Test
+    public void registrationNegativeTestWithTwoAtS() {
+        User user = new User("login@@yoho.com", "Password123!");
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.typeLoginRegistrationFormWithUser(user);
+        loginPage.clickBtnLoginForm();
+        Assert.assertEquals(loginPage.closeAlertReturnText(),
+                "Wrong email or password");
+    }
 }

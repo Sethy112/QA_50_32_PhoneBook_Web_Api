@@ -3,6 +3,7 @@ package ui_tests;
 import dto.User;
 import manager.AppManager;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.BasePage;
 import pages.ContactPage;
@@ -39,9 +40,9 @@ public class LoginTests extends AppManager {
     }
 
     @Test
-    public void loginNegativeTest_WrongEmail(){
-        User user = new User("loginyoho.com","Password123!");
-        HomePage homePage= new HomePage(getDriver());
+    public void loginNegativeTest_WrongEmail() {
+        User user = new User("loginyoho.com", "Password123!");
+        HomePage homePage = new HomePage(getDriver());
         homePage.clickBtnLogin();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginRegistrationFormWithUser(user);
@@ -50,4 +51,40 @@ public class LoginTests extends AppManager {
                 "Wrong email or password");
     }
 
+    @BeforeMethod
+    public void goToLoginPage() {
+        new HomePage(getDriver()).clickBtnLogin();
+        LoginPage loginPage = new LoginPage(getDriver());
+    }
+
+    @Test
+    public void loginNefativeTestisBlank() {
+        User user = new User(" ", " ");
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.typeLoginRegistrationFormWithUser(user);
+        loginPage.clickBtnLoginForm();
+        Assert.assertEquals(loginPage.closeAlertReturnText(),
+                "Wrong email or password");
+    }
+
+
+    @Test
+    public void loginNegativeTestWithTWoDots() {
+        User user = new User("login@yoho..com", "Password123!");
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.typeLoginRegistrationFormWithUser(user);
+        loginPage.clickBtnLoginForm();
+        Assert.assertEquals(loginPage.closeAlertReturnText(),
+                "Wrong email or password");
+    }
+
+    @Test
+    public void loginNegativeTestWithTwoAtS() {
+        User user = new User("login@@yoho.com", "Password123!");
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.typeLoginRegistrationFormWithUser(user);
+        loginPage.clickBtnLoginForm();
+        Assert.assertEquals(loginPage.closeAlertReturnText(),
+                "Wrong email or password");
+    }
 }

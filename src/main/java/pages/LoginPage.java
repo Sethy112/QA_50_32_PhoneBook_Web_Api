@@ -33,6 +33,8 @@ public class LoginPage extends BasePage {
     WebElement btnSignOut;
     @FindBy(xpath = "//a[@href='/add']")
     WebElement btnAdd;
+    @FindBy(xpath = "//div[contains(text(),'Login Failed')]")
+    WebElement code401;
 
 
     public void typeLoginRegistrationForm(String email,
@@ -70,7 +72,9 @@ public class LoginPage extends BasePage {
         alert.accept();
         return text;
     }
-
+    public boolean isTextPresentCode401(String text) {
+        return isTextInElementPresent(code401, text);
+    }
 
 }
 
