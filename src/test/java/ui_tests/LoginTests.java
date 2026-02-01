@@ -11,13 +11,21 @@ import pages.HomePage;
 import pages.LoginPage;
 
 public class LoginTests extends AppManager {
+    LoginPage loginPage;
+
+    @BeforeMethod
+    public void goToLoginPage() {
+        new HomePage(getDriver()).clickBtnLogin();
+        loginPage = new LoginPage(getDriver());
+    }
+
 
     @Test
     public void loginPositiveTest() {
 //        System.out.println("first test");
-        HomePage homePage = new HomePage(getDriver());
-        homePage.clickBtnLogin();
-        LoginPage loginPage = new LoginPage(getDriver());
+//        HomePage homePage = new HomePage(getDriver());
+//        homePage.clickBtnLogin();
+//        LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginRegistrationForm("login@yoho.com",
                 "Password123!");
         loginPage.clickBtnLoginForm();
@@ -29,9 +37,9 @@ public class LoginTests extends AppManager {
     public void loginPositiveTestWithUser() {
         User user = new User("login@yoho.com",
                 "Password123!");
-        HomePage homePage = new HomePage(getDriver());
-        homePage.clickBtnLogin();
-        LoginPage loginPage = new LoginPage(getDriver());
+//        HomePage homePage = new HomePage(getDriver());
+//        homePage.clickBtnLogin();
+//        LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginRegistrationFormWithUser(user);
         loginPage.clickBtnLoginForm();
 //        Assert.assertTrue(loginPage.isLoggedInDisplayed());
@@ -42,25 +50,21 @@ public class LoginTests extends AppManager {
     @Test
     public void loginNegativeTest_WrongEmail() {
         User user = new User("loginyoho.com", "Password123!");
-        HomePage homePage = new HomePage(getDriver());
-        homePage.clickBtnLogin();
-        LoginPage loginPage = new LoginPage(getDriver());
+//        HomePage homePage = new HomePage(getDriver());
+//        homePage.clickBtnLogin();
+//        LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginRegistrationFormWithUser(user);
         loginPage.clickBtnLoginForm();
         Assert.assertEquals(loginPage.closeAlertReturnText(),
                 "Wrong email or password");
     }
 
-    @BeforeMethod
-    public void goToLoginPage() {
-        new HomePage(getDriver()).clickBtnLogin();
-        LoginPage loginPage = new LoginPage(getDriver());
-    }
+
 
     @Test
     public void loginNefativeTestisBlank() {
         User user = new User(" ", " ");
-        LoginPage loginPage = new LoginPage(getDriver());
+//        LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginRegistrationFormWithUser(user);
         loginPage.clickBtnLoginForm();
         Assert.assertEquals(loginPage.closeAlertReturnText(),
@@ -71,7 +75,7 @@ public class LoginTests extends AppManager {
     @Test
     public void loginNegativeTestWithTWoDots() {
         User user = new User("login@yoho..com", "Password123!");
-        LoginPage loginPage = new LoginPage(getDriver());
+//        LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginRegistrationFormWithUser(user);
         loginPage.clickBtnLoginForm();
         Assert.assertEquals(loginPage.closeAlertReturnText(),
@@ -81,7 +85,40 @@ public class LoginTests extends AppManager {
     @Test
     public void loginNegativeTestWithTwoAtS() {
         User user = new User("login@@yoho.com", "Password123!");
-        LoginPage loginPage = new LoginPage(getDriver());
+//        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.typeLoginRegistrationFormWithUser(user);
+        loginPage.clickBtnLoginForm();
+        Assert.assertEquals(loginPage.closeAlertReturnText(),
+                "Wrong email or password");
+    }
+
+    @Test
+    public void loginNegativeTestPasswordIsBlank() {
+        User user = new User("login@@yoho.com", "");
+        loginPage.typeLoginRegistrationFormWithUser(user);
+        loginPage.clickBtnLoginForm();
+        Assert.assertEquals(loginPage.closeAlertReturnText(),
+                "Wrong email or password");
+    }
+    @Test
+    public void loginNegativeTestEmailIsBlank() {
+        User user = new User("", "Password123!");
+        loginPage.typeLoginRegistrationFormWithUser(user);
+        loginPage.clickBtnLoginForm();
+        Assert.assertEquals(loginPage.closeAlertReturnText(),
+                "Wrong email or password");
+    }
+    @Test
+    public void loginNegativeTestEmailisTruPasswordWrong() {
+        User user = new User("login@@yoho.com", "Password1@12");
+        loginPage.typeLoginRegistrationFormWithUser(user);
+        loginPage.clickBtnLoginForm();
+        Assert.assertEquals(loginPage.closeAlertReturnText(),
+                "Wrong email or password");
+    }
+    @Test
+    public void loginNegativeTestPasswordisTruEmailWrong() {
+        User user = new User("login@gmail.com", "Password123!");
         loginPage.typeLoginRegistrationFormWithUser(user);
         loginPage.clickBtnLoginForm();
         Assert.assertEquals(loginPage.closeAlertReturnText(),

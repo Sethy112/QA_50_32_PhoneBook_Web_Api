@@ -58,10 +58,12 @@ public class LoginPage extends BasePage {
     }
 
     public boolean isLoggedInDisplayed() {
+
         return isElementDisplayed(btnSignOut);
     }
 
     public boolean isBtnAdd() {
+
         return isElementDisplayed(btnAdd);
     }
 
@@ -72,7 +74,9 @@ public class LoginPage extends BasePage {
         alert.accept();
         return text;
     }
+
     public boolean isTextPresentCode401(String text) {
+
         return isTextInElementPresent(code401, text);
     }
 
