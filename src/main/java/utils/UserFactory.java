@@ -3,6 +3,8 @@ package utils;
 import dto.User;
 import net.datafaker.Faker;
 
+import static utils.PropertiesReader.getProperty;
+
 public class UserFactory {
    static Faker faker = new Faker();
 
@@ -22,7 +24,7 @@ public class UserFactory {
 //        System.out.println(email);
 //    }
      public  static User positiveUser(){
-         User user = new User(faker.internet().emailAddress(),"Parol123!");
+         User user = new User(faker.internet().emailAddress(),getProperty("base.properties", "password1"));
          return  user;
      }
 }

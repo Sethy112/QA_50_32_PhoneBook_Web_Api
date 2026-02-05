@@ -9,6 +9,8 @@ import pages.BasePage;
 import pages.ContactPage;
 import pages.HomePage;
 import pages.LoginPage;
+import utils.RetryAnalyser;
+import static utils.PropertiesReader.*;
 
 public class LoginTests extends AppManager {
     LoginPage loginPage;
@@ -20,23 +22,20 @@ public class LoginTests extends AppManager {
     }
 
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyser.class)
     public void loginPositiveTest() {
-//        System.out.println("first test");
-//        HomePage homePage = new HomePage(getDriver());
-//        homePage.clickBtnLogin();
-//        LoginPage loginPage = new LoginPage(getDriver());
-        loginPage.typeLoginRegistrationForm("login@yoho.com",
-                "Password123!");
+//        loginPage.typeLoginRegistrationForm("login@yoho.com","Password123!");
+
+        loginPage.typeLoginRegistrationForm(getProperty("base.properties", "login"),
+                getProperty("base.properties", "password"));
         loginPage.clickBtnLoginForm();
-//        Assert.assertTrue(loginPage.isLoggedInDisplayed());
         Assert.assertTrue(new ContactPage(getDriver()).isTextInBtnAddPresent("ADD"));
     }
 
     @Test
     public void loginPositiveTestWithUser() {
-        User user = new User("login@yoho.com",
-                "Password123!");
+        User user = new User(getProperty("base.properties", "login"),
+                getProperty("base.properties", "password"));
 //        HomePage homePage = new HomePage(getDriver());
 //        homePage.clickBtnLogin();
 //        LoginPage loginPage = new LoginPage(getDriver());
@@ -49,7 +48,7 @@ public class LoginTests extends AppManager {
 
     @Test
     public void loginNegativeTest_WrongEmail() {
-        User user = new User("loginyoho.com", "Password123!");
+        User user = new User("loginyoho.com", getProperty("base.properties", "password"));
 //        HomePage homePage = new HomePage(getDriver());
 //        homePage.clickBtnLogin();
 //        LoginPage loginPage = new LoginPage(getDriver());
@@ -74,7 +73,7 @@ public class LoginTests extends AppManager {
 
     @Test
     public void loginNegativeTestWithTWoDots() {
-        User user = new User("login@yoho..com", "Password123!");
+        User user = new User("login@yoho..com", getProperty("base.properties", "password"));
 //        LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginRegistrationFormWithUser(user);
         loginPage.clickBtnLoginForm();
@@ -84,7 +83,7 @@ public class LoginTests extends AppManager {
 
     @Test
     public void loginNegativeTestWithTwoAtS() {
-        User user = new User("login@@yoho.com", "Password123!");
+        User user = new User("login@@yoho.com", getProperty("base.properties", "password"));
 //        LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginRegistrationFormWithUser(user);
         loginPage.clickBtnLoginForm();
@@ -102,7 +101,7 @@ public class LoginTests extends AppManager {
     }
     @Test
     public void loginNegativeTestEmailIsBlank() {
-        User user = new User("", "Password123!");
+        User user = new User("", getProperty("base.properties", "password"));
         loginPage.typeLoginRegistrationFormWithUser(user);
         loginPage.clickBtnLoginForm();
         Assert.assertEquals(loginPage.closeAlertReturnText(),
@@ -110,7 +109,7 @@ public class LoginTests extends AppManager {
     }
     @Test
     public void loginNegativeTestEmailisTruPasswordWrong() {
-        User user = new User("login@@yoho.com", "Password1@12");
+        User user = new User("login@@yoho.com", getProperty("base.properties", "password"));
         loginPage.typeLoginRegistrationFormWithUser(user);
         loginPage.clickBtnLoginForm();
         Assert.assertEquals(loginPage.closeAlertReturnText(),
@@ -118,7 +117,7 @@ public class LoginTests extends AppManager {
     }
     @Test
     public void loginNegativeTestPasswordisTruEmailWrong() {
-        User user = new User("login@gmail.com", "Password123!");
+        User user = new User("login@gmail.com", getProperty("base.properties", "password"));
         loginPage.typeLoginRegistrationFormWithUser(user);
         loginPage.clickBtnLoginForm();
         Assert.assertEquals(loginPage.closeAlertReturnText(),

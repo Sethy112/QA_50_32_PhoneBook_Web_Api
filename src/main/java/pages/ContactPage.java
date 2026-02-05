@@ -1,10 +1,16 @@
 package pages;
 
+import dto.Contact;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.WheelInput;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+
+import java.util.List;
 
 public class ContactPage extends BasePage {
     public ContactPage(WebDriver driver) {
@@ -18,6 +24,44 @@ public class ContactPage extends BasePage {
     WebElement btnAdd;
     @FindBy(xpath = "//h1[text()=' No Contacts here!']")
     WebElement contactPageMassage;
+    @FindBy(className = "contact-item_card__2SOIM")
+    List<WebElement> contactList;
+    @FindBy(xpath = "//div[@class= 'contact-item_card__2SOIM'][last()]")
+    WebElement lastContact;
+    @FindBy(xpath = "//div[@class='contact-page_leftdiv__yhyke']/div")
+    WebElement divListContact;
+
+    public boolean IsContactPresent(Contact contact) {
+        for (WebElement element : contactList) {
+            if (element.getText().contains(contact.getName())
+                    && element.getText().contains(contact.getPhone())) {
+                System.out.println(element.getText());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void scrollToLastContact(){
+        Actions actions= new Actions(driver);
+//        actions.scrollToElement(lastContact).perform();
+//        int deltaY= driver.findElement(By.xpath("//div[@class='contact-page_leftdiv__yhyke']/div"))
+//                .getSize().getHeight();
+        int deltaY = divListContact.getSize().getHeight();
+        System.out.println("Height-->"+deltaY);
+        WheelInput.ScrollOrigin scrollOrigin = WheelInput.ScrollOrigin.fromElement(contactList.get(0));
+        pausa(3);
+        actions.scrollFromOrigin(scrollOrigin, 0,deltaY).perform();
+    }
+
+
+    public void clickLastContact(){
+        lastContact.click();
+    }
+
+    public int getCountOfContacts(){
+        return contactList.size();
+    }
 
     public boolean isTextInContactPageMassagePresent(String text){
         return isTextInElementPresent(contactPageMassage,text);
