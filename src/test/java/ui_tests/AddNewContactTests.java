@@ -1,10 +1,12 @@
 package ui_tests;
 
+import data_provaders.ContactDataProvider;
 import dto.Contact;
 import manager.AppManager;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import pages.*;
 import utils.HeaderMenuItem;
 import static utils.PropertiesReader.*;
@@ -13,6 +15,7 @@ import static pages.BasePage.clickButtonHeader;
 import static utils.ContactFactory.*;
 
 public class AddNewContactTests extends AppManager {
+    SoftAssert softAssert = new SoftAssert();
     HomePage homePage;
     LoginPage loginPage;
     ContactPage contactPage;
@@ -38,6 +41,14 @@ public class AddNewContactTests extends AppManager {
         int countOfContactsAfterAdd = contactPage.getCountOfContacts();
         Assert.assertEquals(countOfContactsAfterAdd, countOfContacts + 1);
     }
+    @Test(dataProvider = "dataProviderFromFile",
+            dataProviderClass = ContactDataProvider.class)
+
+    public void addNewContactPositiveTestWithDataProvider(Contact contact) {
+        addPage.typeContactForm(contact);
+        int countOfContactsAfterAdd = contactPage.getCountOfContacts();
+        Assert.assertEquals(countOfContactsAfterAdd, countOfContacts + 1);
+    }
 
     @Test
     public void addNewContactPositiveTest_ClickLastContact() {
@@ -52,7 +63,20 @@ public class AddNewContactTests extends AppManager {
         Contact contact = positiveContact();
         addPage.typeContactForm(contact);
         contactPage.scrollToLastContact();
-        Assert.assertTrue(contactPage.IsContactPresent(contact));
+        contactPage.clickLastContact();
+        String text = contactPage.getTextInContact();
+        System.out.println(text);
+        softAssert.assertTrue(text.contains(contact.getName()),
+                "validate Name in DetailCard");
+        softAssert.assertTrue(text.contains(contact.getEmail()),
+                "validate Email in DetailCard");
+        softAssert.assertTrue(text.contains(contact.getPhone()),
+                "validate Phone in DetailCard");
+        softAssert.assertAll();
+
+
+
+
     }
 
 }

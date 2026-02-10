@@ -30,6 +30,12 @@ public class ContactPage extends BasePage {
     WebElement lastContact;
     @FindBy(xpath = "//div[@class='contact-page_leftdiv__yhyke']/div")
     WebElement divListContact;
+    @FindBy(xpath = "//div[@class='contact-item-detailed_card__50dTS']")
+    WebElement itemDetailCard;
+
+    public  String getTextInContact(){
+        return itemDetailCard.getText();
+    }
 
     public boolean IsContactPresent(Contact contact) {
         for (WebElement element : contactList) {
@@ -42,29 +48,29 @@ public class ContactPage extends BasePage {
         return false;
     }
 
-    public void scrollToLastContact(){
-        Actions actions= new Actions(driver);
+    public void scrollToLastContact() {
+        Actions actions = new Actions(driver);
 //        actions.scrollToElement(lastContact).perform();
 //        int deltaY= driver.findElement(By.xpath("//div[@class='contact-page_leftdiv__yhyke']/div"))
 //                .getSize().getHeight();
         int deltaY = divListContact.getSize().getHeight();
-        System.out.println("Height-->"+deltaY);
+        System.out.println("Height-->" + deltaY);
         WheelInput.ScrollOrigin scrollOrigin = WheelInput.ScrollOrigin.fromElement(contactList.get(0));
         pausa(3);
-        actions.scrollFromOrigin(scrollOrigin, 0,deltaY).perform();
+        actions.scrollFromOrigin(scrollOrigin, 0, deltaY).perform();
     }
 
 
-    public void clickLastContact(){
+    public void clickLastContact() {
         lastContact.click();
     }
 
-    public int getCountOfContacts(){
+    public int getCountOfContacts() {
         return contactList.size();
     }
 
-    public boolean isTextInContactPageMassagePresent(String text){
-        return isTextInElementPresent(contactPageMassage,text);
+    public boolean isTextInContactPageMassagePresent(String text) {
+        return isTextInElementPresent(contactPageMassage, text);
     }
 
     public boolean isTextInBtnSignOutPresent(String text) {
