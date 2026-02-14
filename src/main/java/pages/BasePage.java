@@ -1,6 +1,7 @@
 package pages;
 
 import net.bytebuddy.implementation.bytecode.Throw;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -60,6 +61,14 @@ public abstract class BasePage {
             default -> throw new IllegalArgumentException("Invalid headerMenuItem ");
 
         }
+    }
+
+    public String closeAlertReturnText() {
+        Alert alert = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.alertIsPresent());
+        String text = alert.getText();
+        alert.accept();
+        return text;
     }
 
 }

@@ -37,4 +37,7 @@ public class AddPage extends BasePage {
         inputDescription.sendKeys(contact.getDescription());
         btnSave.click();
     }
+    public boolean isButtonSaveDasabled(){
+        return btnSave.isDisplayed();
+    }
 }

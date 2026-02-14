@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import pages.*;
 import utils.HeaderMenuItem;
+
 import static utils.PropertiesReader.*;
 
 import static pages.BasePage.clickButtonHeader;
@@ -41,6 +42,7 @@ public class AddNewContactTests extends AppManager {
         int countOfContactsAfterAdd = contactPage.getCountOfContacts();
         Assert.assertEquals(countOfContactsAfterAdd, countOfContacts + 1);
     }
+
     @Test(dataProvider = "dataProviderFromFile",
             dataProviderClass = ContactDataProvider.class)
 
@@ -74,9 +76,22 @@ public class AddNewContactTests extends AppManager {
                 "validate Phone in DetailCard");
         softAssert.assertAll();
 
+    }
 
-
+    @Test(dataProvider = "dataProviderFromWrongPhone",
+            dataProviderClass = ContactDataProvider.class)
+    public void addNewContactNegativeTest_WrongPhoneWithDP(Contact contact) {
+        addPage.typeContactForm(contact);
+        Assert.assertTrue(addPage.closeAlertReturnText().contains("Phone not valid:"));
 
     }
+
+    @Test(dataProvider = "dataProviderFromFile_Wrong_EmptyField",
+            dataProviderClass = ContactDataProvider.class)
+    public void addNewContactNegativeTest_Empty_Field_WithDP(Contact contact) {
+        addPage.typeContactForm(contact);
+        Assert.assertTrue(addPage.isButtonSaveDasabled());
+    }
+
 
 }
