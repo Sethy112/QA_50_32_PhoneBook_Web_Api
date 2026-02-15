@@ -10,6 +10,8 @@ import org.testng.asserts.SoftAssert;
 import pages.*;
 import utils.HeaderMenuItem;
 
+import java.lang.reflect.Method;
+
 import static utils.PropertiesReader.*;
 
 import static pages.BasePage.clickButtonHeader;
@@ -94,7 +96,8 @@ public class AddNewContactTests extends AppManager {
     }
     @Test(dataProvider = "dataProviderFromWrongEmail",
             dataProviderClass = ContactDataProvider.class)
-    public void addNewContactNegativeTest_Wrong_Email_DP(Contact contact) {
+    public void addNewContactNegativeTest_Wrong_Email_DP(Contact contact, Method method) {
+        logger.info("start test "+ method.getName()+ " with user ");
         addPage.typeContactForm(contact);
         Assert.assertTrue(addPage.closeAlertReturnText().contains("Email not valid:"));
     }
