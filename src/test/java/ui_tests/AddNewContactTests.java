@@ -92,6 +92,12 @@ public class AddNewContactTests extends AppManager {
         addPage.typeContactForm(contact);
         Assert.assertTrue(addPage.isButtonSaveDasabled());
     }
+    @Test(dataProvider = "dataProviderFromWrongEmail",
+            dataProviderClass = ContactDataProvider.class)
+    public void addNewContactNegativeTest_Wrong_Email_DP(Contact contact) {
+        addPage.typeContactForm(contact);
+        Assert.assertTrue(addPage.closeAlertReturnText().contains("Email not valid:"));
+    }
 
 
 }

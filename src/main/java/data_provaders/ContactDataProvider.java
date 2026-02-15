@@ -40,6 +40,7 @@ public class ContactDataProvider {
         return list.listIterator();
 
     }
+
     @DataProvider
     public Iterator<Contact> dataProviderFromWrongPhone() {
         List<Contact> list = new ArrayList<>();
@@ -83,6 +84,32 @@ public class ContactDataProvider {
                         .email(contact.getEmail())
                         .phone(contact.getPhone())
                         .address(splitArray[2])
+                        .description(contact.getDescription())
+                        .build());
+                line = bufferedReader.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("IO exception");
+        }
+        return list.listIterator();
+
+    }
+    @DataProvider
+    public Iterator<Contact> dataProviderFromWrongEmail() {
+        List<Contact> list = new ArrayList<>();
+        Contact contact = positiveContact();
+        try (BufferedReader bufferedReader
+                     = new BufferedReader(new FileReader
+                ("src/test/resources/data_csv/dp_wrong_email.csv"))) {
+            String line = bufferedReader.readLine();
+            while (line != null) {
+                list.add(Contact.builder()
+                        .name(contact.getName())
+                        .lastName(contact.getLastName())
+                        .email(line)
+                        .phone(contact.getPhone())
+                        .address(contact.getAddress())
                         .description(contact.getDescription())
                         .build());
                 line = bufferedReader.readLine();
