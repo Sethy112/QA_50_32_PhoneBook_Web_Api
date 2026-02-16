@@ -43,6 +43,7 @@ public class LoginTests extends AppManager {
 //        homePage.clickBtnLogin();
 //        LoginPage loginPage = new LoginPage(getDriver());
         logger.info("start test "+ method.getName()+ " with user "+ user);
+
         loginPage.typeLoginRegistrationFormWithUser(user);
         loginPage.clickBtnLoginForm();
 //        Assert.assertTrue(loginPage.isLoggedInDisplayed());
