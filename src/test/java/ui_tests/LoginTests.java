@@ -4,16 +4,19 @@ import dto.User;
 import manager.AppManager;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import pages.BasePage;
 import pages.ContactPage;
 import pages.HomePage;
 import pages.LoginPage;
 import utils.RetryAnalyser;
+import utils.TestNGListener;
 
 import java.lang.reflect.Method;
 
 import static utils.PropertiesReader.*;
+@Listeners(TestNGListener.class)
 
 public class LoginTests extends AppManager {
     LoginPage loginPage;
