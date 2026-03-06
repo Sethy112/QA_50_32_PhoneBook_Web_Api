@@ -17,7 +17,7 @@ import java.util.Random;
 public class RegistrationTests extends AppManager {
     LoginPage loginPage;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void goToRegistrationPage() {
         new HomePage(getDriver()).clickBtnLogin();
         loginPage = new LoginPage(getDriver());
@@ -36,7 +36,7 @@ public class RegistrationTests extends AppManager {
 
     }
 
-    @Test
+    @Test(groups = {"Smoke","user"})
     public void registrationPositiveTest_WithFaker() {
         User user = positiveUser();
         System.out.println(user);
@@ -47,7 +47,7 @@ public class RegistrationTests extends AppManager {
 
     }
 
-    @Test
+    @Test(groups ="negative")
     public void regictrationNefativeTestisBlank() {
         User user = new User(" ", " ");
         LoginPage loginPage = new LoginPage(getDriver());

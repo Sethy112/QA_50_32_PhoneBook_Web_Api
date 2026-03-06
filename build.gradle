@@ -27,3 +27,35 @@ dependencies {
 test {
     useTestNG()
 }
+
+
+task smoketests(type: Test) {
+    useTestNG() {
+        suites 'src/test/resources/smoketests.xml'
+    }
+}
+
+
+task smoke_contact_tests(type: Test) {
+    useTestNG() {
+        suites 'src/test/resources/smoke_contact_tests.xml'
+    }
+}
+
+task negative_tests(type: Test) {
+    useTestNG() {
+        suites 'src/test/resources/negative_tests.xml'
+    }
+}
+task different_tests(type: Test) {
+    useTestNG() {
+        def suite = System.getProperty('suite', 'smoketests')
+        if (suite.equalsIgnoreCase('smoke_contact_tests')) {
+            suites 'src/test/resources/smoke_contact_tests.xml'
+        } else if (suite.equalsIgnoreCase('negative_tests')) {
+            suites 'src/test/resources/negative_tests.xml'
+        } else {
+            suites 'src/test/resources/smoketests.xml'
+        }
+    }
+}

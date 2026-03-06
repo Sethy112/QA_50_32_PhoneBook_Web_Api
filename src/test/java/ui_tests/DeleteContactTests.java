@@ -21,7 +21,7 @@ public class DeleteContactTests extends AppManager {
 
     int countOfContacts;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void login() {
         homePage = new HomePage(getDriver());
         loginPage = BasePage.clickButtonHeader(LOGIN);
@@ -32,7 +32,7 @@ public class DeleteContactTests extends AppManager {
         countOfContacts = contactPage.getCountOfContacts();
     }
 
-    @Test
+    @Test(groups ={"Smoke","contact"})
     public void deleteFirstContactPositiveTest() {
         contactPage.deleteFirstContact();
         contactPage.pausa(3);

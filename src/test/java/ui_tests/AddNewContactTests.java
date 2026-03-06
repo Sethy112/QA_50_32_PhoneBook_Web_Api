@@ -25,7 +25,7 @@ public class AddNewContactTests extends AppManager {
     AddPage addPage;
     int countOfContacts;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void login() {
         homePage = new HomePage(getDriver());
         loginPage = clickButtonHeader(HeaderMenuItem.LOGIN);
@@ -38,7 +38,7 @@ public class AddNewContactTests extends AppManager {
         addPage = clickButtonHeader(HeaderMenuItem.ADD);
     }
 
-    @Test
+    @Test(groups = {"Smoke","contact"})
     public void addNewContactPositiveTest() {
         addPage.typeContactForm(positiveContact());
         int countOfContactsAfterAdd = contactPage.getCountOfContacts();
@@ -88,7 +88,7 @@ public class AddNewContactTests extends AppManager {
 
     }
 
-    @Test(dataProvider = "dataProviderFromFile_Wrong_EmptyField",
+    @Test(groups = "negative", dataProvider = "dataProviderFromFile_Wrong_EmptyField",
             dataProviderClass = ContactDataProvider.class)
     public void addNewContactNegativeTest_Empty_Field_WithDP(Contact contact) {
         addPage.typeContactForm(contact);

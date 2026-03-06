@@ -22,7 +22,7 @@ public class EditContactTests extends AppManager {
     ContactPage contactPage;
 
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void login() {
         homePage = new HomePage(getDriver());
         loginPage = BasePage.clickButtonHeader(LOGIN);
@@ -32,14 +32,14 @@ public class EditContactTests extends AppManager {
         contactPage = new ContactPage(getDriver());
     }
 
-    @Test
+    @Test(groups = {"Smoke","contact"})
     public void  editFirstContactPositiveTest(){
         Contact contact =ContactFactory.positiveContact();
         contactPage.typeEditForm(contact);
         contactPage.pausa(3);
         Assert.assertTrue(contactPage.IsContactPresent(contact));
     }
-    @Test
+    @Test(groups = "negative")
     public void  editFirstContactPositiveTest_WithCardOfContact(){
         Contact contact =ContactFactory.positiveContact();
         contactPage.typeEditForm(contact);

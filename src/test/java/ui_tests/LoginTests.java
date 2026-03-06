@@ -21,7 +21,7 @@ import static utils.PropertiesReader.*;
 public class LoginTests extends AppManager {
     LoginPage loginPage;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void goToLoginPage() {
         new HomePage(getDriver()).clickBtnLogin();
         loginPage = new LoginPage(getDriver());
@@ -38,7 +38,7 @@ public class LoginTests extends AppManager {
         Assert.assertTrue(new ContactPage(getDriver()).isTextInBtnAddPresent("ADD"));
     }
 
-    @Test
+    @Test(groups = {"Smoke","user"})
     public void loginPositiveTestWithUser(Method method) {
         User user = new User(getProperty("base.properties", "login"),
                 getProperty("base.properties", "password"));
@@ -54,7 +54,7 @@ public class LoginTests extends AppManager {
         Assert.assertTrue(new ContactPage(getDriver()).isTextInBtnSignOutPresent("Sign Out"));
     }
 
-    @Test
+    @Test(groups = "negative")
     public void loginNegativeTest_WrongEmail() {
         User user = new User("loginyoho.com", getProperty("base.properties", "password"));
 //        HomePage homePage = new HomePage(getDriver());
