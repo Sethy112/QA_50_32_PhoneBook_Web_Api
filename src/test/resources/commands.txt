@@ -2,6 +2,11 @@
 .\gradlew clean smoke_contact_tests
 .\gradlew clean negative_tests
 .\gradlew clean different_tests -Dsuite=smoke_contact_tests
+.\gradlew clean browser_tests -Pbrowser=firefox
+.\gradlew clean browser_tests -Pbrowser=edge
+
+
+C:\Users\POLLAP\IdeaProjects\QA_50_32_PhoneBook_Web_Api
 
 //через терминал компьютера
 cd    путь к проекту +
