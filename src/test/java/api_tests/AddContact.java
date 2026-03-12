@@ -29,10 +29,10 @@ public class AddContact implements BaseApi {
         Response response;
         try {
             response = OK_HTTP_CLIENT.newCall(request).execute();
-            String responseBody = response.body().string();
+//            String responseBody = response.body().string();
 
             JsonObject json = JsonParser
-                    .parseString(responseBody)
+                    .parseString(response.body().string())
                     .getAsJsonObject();
 
             token = json.get("token").getAsString();
