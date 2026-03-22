@@ -1,5 +1,6 @@
 package api_tests;
 
+import dto.Contact;
 import dto.User;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static utils.ContactFactory.positiveContact;
 import static utils.PropertiesReader.getProperty;
 import static utils.UserFactory.positiveUser;
 
@@ -37,5 +39,25 @@ public class LoginApiTest_NOT_INportant implements  BaseApi{
         Assert.assertEquals(response.code(), 400);
     }
 
+    @Test
+    public void registrationNegative_Wrong_Key_User_ApiTest() {
+        Contact contact = positiveContact();
+        Map<String, String> invalidJson = new HashMap<>();
+        invalidJson.put("nam", contact.getName());
+
+        RequestBody requestBody = RequestBody.create(GSON.toJson(invalidJson), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + REGISTRATION_URL)
+                .post(requestBody)
+                .build();
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(response.code(), 500);
+        System.out.println(response.code());
+    }
 
 }

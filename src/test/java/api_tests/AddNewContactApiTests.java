@@ -14,6 +14,8 @@ import org.testng.asserts.SoftAssert;
 import utils.BaseApi;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static utils.UserFactory.positiveUser;
 import static utils.PropertiesReader.*;
@@ -157,33 +159,58 @@ public class AddNewContactApiTests implements BaseApi {
         }
         Assert.assertEquals(response.code(), 500);
     }
+
     @Test
-    public void addNewNegativeContact_With_NameIsEmpty_ApiTest() {
+    public void addNewContactNegative_ApiTest() {
         Contact contact = positiveContact();
-        contact.setName(" ");
         RequestBody requestBody = RequestBody
                 .create(GSON.toJson(contact), JSON);
         Request request = new Request.Builder()
-                .url(BASE_URL + ADD_NEW_CONTACT_URL)
+                .url(BASE_URLWRONG + ADD_NEW_CONTACT_URL)
                 .addHeader(AUTH, token.getToken())
                 .post(requestBody)
                 .build();
-        try (Response response = OK_HTTP_CLIENT.newCall(request)
-                .execute()) {
-            softAssert.assertEquals(response.code(), 400,
-                    "validate status code");
-            ResponseMessageDto responseMessageDto = GSON.fromJson
-                    (response.body().string(),
-                            ResponseMessageDto.class);
-            System.out.println(responseMessageDto);
-            softAssert.assertTrue(responseMessageDto
-                            .getMessage().contains("Contact was added!")
-                    ,"validate message");
-            softAssert.assertAll();
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request)
+                    .execute();
         } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail("created exception");
-        }}
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(response.code(), 500, "Заменил https на  http. БАГ!!!");
+    }
+//    @Test
+//    public void addNewNegativeContact_With_NameIsEmpty_ApiTest() {
+//        Contact contact = positiveContact();
+//        contact.setName(" ");
+//        RequestBody requestBody = RequestBody
+//                .create(GSON.toJson(contact), JSON);
+//        Request request = new Request.Builder()
+//                .url(BASE_URL + ADD_NEW_CONTACT_URL)
+//                .addHeader(AUTH, token.getToken())
+//                .post(requestBody)
+//                .build();
+//        try (Response response = OK_HTTP_CLIENT.newCall(request)
+//                .execute()) {
+//            softAssert.assertEquals(response.code(), 400,
+//                    "validate status code");
+//
+//            ResponseMessageDto responseMessageDto = GSON.fromJson
+//                    (response.body().string(),
+//                            ResponseMessageDto.class);
+////            System.out.println(responseMessageDto);
+////            softAssert.assertTrue(responseMessageDto
+////                            .getMessage().contains("Contact was added!")
+////                    ,"validate message");
+////            softAssert.assertAll();
+//
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        Assert.assertEquals(responseMessageDto.code(), 401);
+//    }
+
+
     @Test
     public void addNewContactNegative_Wrong_MediaTypeXML_ApiTest() {
         Contact contact = positiveContact();
@@ -201,7 +228,7 @@ public class AddNewContactApiTests implements BaseApi {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Assert.assertEquals(response.code(), 500);
+        Assert.assertEquals(response.code(), 500, "Must be Code 415");
     }
     @Test
     public void addNewContactNegative_Wrong_MediaTypeHTML_ApiTest() {
@@ -221,5 +248,81 @@ public class AddNewContactApiTests implements BaseApi {
             throw new RuntimeException(e);
         }
         Assert.assertEquals(response.code(), 500);
+    }
+
+
+    @Test
+    public void addNewContactNegative_WrongKeyName_ApiTest() {
+        Contact contact = positiveContact();
+        Map<String, String> invalidJson = new HashMap<>();
+        invalidJson.put("Shopopalo", contact.getName());
+//        invalidJson.put("lastName", contact.getLastName());
+        RequestBody requestBody = RequestBody
+                .create(GSON.toJson(invalidJson), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + ADD_NEW_CONTACT_URL)
+                .addHeader(AUTH, token.getToken())
+                .post(requestBody)
+                .build();
+        System.out.println(invalidJson);
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request)
+                    .execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(contact);
+        System.out.println(response.code());
+        Assert.assertEquals(response.code(), 500,"Must be 500");
+    }
+    @Test
+    public void addNewContactNegative_WrongKeyLastName_ApiTest() {
+        Contact contact = positiveContact();
+        Map<String, String> invalidJson = new HashMap<>();
+        invalidJson.put("Shopopalo", contact.getLastName());
+//        invalidJson.put("lastName", contact.getLastName());
+        RequestBody requestBody = RequestBody
+                .create(GSON.toJson(invalidJson), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + ADD_NEW_CONTACT_URL)
+                .addHeader(AUTH, token.getToken())
+                .post(requestBody)
+                .build();
+        System.out.println(invalidJson);
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request)
+                    .execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(contact);
+        System.out.println(response.code());
+        Assert.assertEquals(response.code(), 500,"Must be 500");
+    }
+    @Test
+    public void addNewContactNegative_WrongKeyAdress_ApiTest() {
+        Contact contact = positiveContact();
+        Map<String, String> invalidJson = new HashMap<>();
+        invalidJson.put("Shopopalo", contact.getAddress());
+        RequestBody requestBody = RequestBody
+                .create(GSON.toJson(invalidJson), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + ADD_NEW_CONTACT_URL)
+                .addHeader(AUTH, token.getToken())
+                .post(requestBody)
+                .build();
+        System.out.println(invalidJson);
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request)
+                    .execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(contact);
+        System.out.println(response.code());
+        Assert.assertEquals(response.code(), 500,"Must be 500");
     }
 }

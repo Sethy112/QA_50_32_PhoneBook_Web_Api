@@ -341,4 +341,22 @@ public class RegistrationApiTests implements BaseApi {
         }
         Assert.assertEquals(response.code(), 400);
     }
+
+    @Test
+    public void registrationNegativeWrongBaseUrl_ApiTests() {
+        User user = new User(getProperty("base.properties","login"),
+                getProperty("base.properties", "password"));
+        RequestBody requestBody = RequestBody.create(GSON.toJson(user), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URLWRONG + REGISTRATION_URL)
+                .post(requestBody)
+                .build();
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(response.code(), 409);
+    }
 }
