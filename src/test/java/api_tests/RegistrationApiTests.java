@@ -78,7 +78,6 @@ public class RegistrationApiTests implements BaseApi {
     public void registrationNegativeTEst_Withoutpassword_ApiTest() {
         User user = positiveUser();
         user.setPassword(null);
-
         RequestBody requestBody = RequestBody.create(GSON.toJson(user), JSON);
         Request request = new Request.Builder()
                 .url(BASE_URL + REGISTRATION_URL)
@@ -127,7 +126,6 @@ public class RegistrationApiTests implements BaseApi {
             throw new RuntimeException(e);
         }
         Assert.assertEquals(response.code(), 400);
-
     }
 
     @Test
@@ -170,8 +168,7 @@ public class RegistrationApiTests implements BaseApi {
     @Test
     public void registrationNegative_Wrong_Format_Text_ApiTest() {
         User user = positiveUser();
-        user.setPassword("wrong password");
-        System.out.println(user);
+//        user.setPassword("wrong password");
         RequestBody requestBody = RequestBody.create(GSON.toJson(user), TEXT);
         Request request = new Request.Builder()
                 .url(BASE_URL + REGISTRATION_URL)
@@ -206,5 +203,142 @@ public class RegistrationApiTests implements BaseApi {
         Assert.assertEquals(response.code(), 500);
         System.out.println(response.code());
     }
+    //    5 Test with pattern password (Parol12!)
+    @Test
+    public void registrationNegativePassword_WithOut_UpperCase_ApiTests() {
+        User user = new User(getProperty("base.properties","login"),
+                ("parol12!"));
+        RequestBody requestBody = RequestBody.create(GSON.toJson(user), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + REGISTRATION_URL)
+                .post(requestBody)
+                .build();
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(response.code(), 400);
+    }
+    @Test
+    public void registrationNegativePassword_WithOut_LowerCase_ApiTests() {
+        User user = new User(getProperty("base.properties","login"),
+                ("PAROL12!"));
+        RequestBody requestBody = RequestBody.create(GSON.toJson(user), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + REGISTRATION_URL)
+                .post(requestBody)
+                .build();
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(response.code(), 400);
+    }
+    @Test
+    public void registrationNegativePassword_WithOut_Number_ApiTests() {
+        User user = new User(getProperty("base.properties","login"),
+                ("Parolll!"));
+        RequestBody requestBody = RequestBody.create(GSON.toJson(user), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + REGISTRATION_URL)
+                .post(requestBody)
+                .build();
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(response.code(), 400);
+    }
+    @Test
+    public void registrationNegativePassword_WithOut_SpecSymbol_ApiTests() {
+        User user = new User(getProperty("base.properties","login"),
+                ("Parol12l!"));
+        RequestBody requestBody = RequestBody.create(GSON.toJson(user), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + REGISTRATION_URL)
+                .post(requestBody)
+                .build();
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(response.code(), 409);
+    }
+    @Test
+    public void registrationNegativePassword_LongWrong_ApiTests() {
+        User user = new User(getProperty("base.properties","login"),
+                ("Parl12l!"));
+        RequestBody requestBody = RequestBody.create(GSON.toJson(user), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + REGISTRATION_URL)
+                .post(requestBody)
+                .build();
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(response.code(), 409);
+    }
+    @Test
+    public void registrationNegative_WithOutAt_Username_ApiTest() {
+        User user = new User(getProperty("loginyoh@.com", "login"),
+                getProperty("base.properties", "password"));
+        RequestBody requestBody = RequestBody.create(GSON.toJson(user), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + REGISTRATION_URL)
+                .post(requestBody)
+                .build();
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(response.code(), 400);
+    }
+    @Test
+    public void registrationNegative_WithTwoDots_Username_ApiTest() {
+        User user = new User(getProperty("loginy.oh.com", "login"),
+                getProperty("base.properties", "password"));
+        RequestBody requestBody = RequestBody.create(GSON.toJson(user), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + REGISTRATION_URL)
+                .post(requestBody)
+                .build();
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(response.code(), 400);
+    }
 
+    @Test
+    public void registrationNegativeTest_SubstitutionLoginPassword_ApiTest() {
+        User user = new User(getProperty("base.properties", "password"),
+                getProperty("base.properties", "login"));
+        RequestBody requestBody = RequestBody.create(GSON.toJson(user), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + REGISTRATION_URL)
+                .post(requestBody)
+                .build();
+        Response response;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(response.code(), 400);
+    }
 }

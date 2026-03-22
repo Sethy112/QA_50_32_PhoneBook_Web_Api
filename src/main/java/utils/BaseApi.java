@@ -20,4 +20,6 @@ public interface BaseApi {
     MediaType TEXT= MediaType.get("text/plain");
     String AUTH = "Authorization";
 
+    MediaType XML = MediaType.get("application/xml");
+    MediaType HTML = MediaType.get("text/html");
 }
