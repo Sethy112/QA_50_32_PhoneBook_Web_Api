@@ -1,9 +1,6 @@
 package api_tests;
 
-import dto.Contact;
-import dto.ResponseMessageDto;
-import dto.TokenDto;
-import dto.User;
+import dto.*;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -244,8 +241,8 @@ public class AddNewContactApiTests implements BaseApi {
         try {
             response = OK_HTTP_CLIENT.newCall(request)
                     .execute();
-            softAssert.assertEquals(response.code(),500,"Validate code");
-            ResponseMessageDto responseMessageDto=GSON.fromJson(response.body().string(), ResponseMessageDto.class);
+            softAssert.assertEquals(response.code(), 500, "Validate code");
+            ResponseMessageDto responseMessageDto = GSON.fromJson(response.body().string(), ResponseMessageDto.class);
             System.out.println(responseMessageDto);
             softAssert.assertTrue(responseMessageDto.getMessage().contains("not supported"), "validate message");
         } catch (IOException e) {
@@ -336,10 +333,17 @@ public class AddNewContactApiTests implements BaseApi {
     }
 
 
-        @Test
-        public void addNewContactPositiveApiTestWith() {
-            Contact contact = Contact.builder()
-
+    @Test
+    public void addNewContactNegative_DuplicateContactApiTest() throws IOException {
+        Request getRequest = new Request.Builder()
+                .url(BASE_URL + GET_ALL_CONTACTS_URL)
+                .addHeader(AUTH, token.getToken())
+                .get()
+                .build();
+        try (Response getResponse = OK_HTTP_CLIENT.newCall(getRequest).execute()) {
+            ContactsDto Contacts = GSON.fromJson(getResponse.body().string(), ContactsDto.class);
+            Contact contact = Contacts.getContacts().get(0);
+            System.out.println(contact);
             RequestBody requestBody = RequestBody
                     .create(GSON.toJson(contact), JSON);
             Request request = new Request.Builder()
@@ -347,16 +351,19 @@ public class AddNewContactApiTests implements BaseApi {
                     .addHeader(AUTH, token.getToken())
                     .post(requestBody)
                     .build();
-            Response response;
-            try {
-                response = OK_HTTP_CLIENT.newCall(request)
-                        .execute();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            System.out.println(request);
+            try (Response response2 = OK_HTTP_CLIENT.newCall(request).execute()) {
+                System.out.println(response2.code());
+                System.out.println(contact);
+
+                Assert.assertEquals(response2.code(), 409,"Should be 409, but added successful and retern Code 200");
+
             }
-            Assert.assertEquals(response.code(), 200);
         }
     }
+}
+
+
 
 
 
