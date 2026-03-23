@@ -51,7 +51,7 @@ public class AddNewContactApiTests implements BaseApi {
                 throw new RuntimeException(e);
             }
         }
-            }
+    }
 
     @Test
     public void addNewContactPositiveApiTest() {
@@ -93,7 +93,7 @@ public class AddNewContactApiTests implements BaseApi {
             System.out.println(responseMessageDto);
             softAssert.assertTrue(responseMessageDto
                             .getMessage().contains("Contact was added!")
-                    ,"validate message");
+                    , "validate message");
             softAssert.assertAll();
         } catch (IOException e) {
             e.printStackTrace();
@@ -198,19 +198,18 @@ public class AddNewContactApiTests implements BaseApi {
 //            ResponseMessageDto responseMessageDto = GSON.fromJson
 //                    (response.body().string(),
 //                            ResponseMessageDto.class);
-////            System.out.println(responseMessageDto);
-////            softAssert.assertTrue(responseMessageDto
-////                            .getMessage().contains("Contact was added!")
-////                    ,"validate message");
-////            softAssert.assertAll();
+
+    /// /            System.out.println(responseMessageDto);
+    /// /            softAssert.assertTrue(responseMessageDto
+    /// /                            .getMessage().contains("Contact was added!")
+    /// /                    ,"validate message");
+    /// /            softAssert.assertAll();
 //
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
 //        Assert.assertEquals(responseMessageDto.code(), 401);
 //    }
-
-
     @Test
     public void addNewContactNegative_Wrong_MediaTypeXML_ApiTest() {
         Contact contact = positiveContact();
@@ -230,6 +229,7 @@ public class AddNewContactApiTests implements BaseApi {
         }
         Assert.assertEquals(response.code(), 500, "Must be Code 415");
     }
+
     @Test
     public void addNewContactNegative_Wrong_MediaTypeHTML_ApiTest() {
         Contact contact = positiveContact();
@@ -244,6 +244,10 @@ public class AddNewContactApiTests implements BaseApi {
         try {
             response = OK_HTTP_CLIENT.newCall(request)
                     .execute();
+            softAssert.assertEquals(response.code(),500,"Validate code");
+            ResponseMessageDto responseMessageDto=GSON.fromJson(response.body().string(), ResponseMessageDto.class);
+            System.out.println(responseMessageDto);
+            softAssert.assertTrue(responseMessageDto.getMessage().contains("not supported"), "validate message");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -274,8 +278,9 @@ public class AddNewContactApiTests implements BaseApi {
         }
         System.out.println(contact);
         System.out.println(response.code());
-        Assert.assertEquals(response.code(), 500,"Must be 500");
+        Assert.assertEquals(response.code(), 400, "Must ");
     }
+
     @Test
     public void addNewContactNegative_WrongKeyLastName_ApiTest() {
         Contact contact = positiveContact();
@@ -299,8 +304,9 @@ public class AddNewContactApiTests implements BaseApi {
         }
         System.out.println(contact);
         System.out.println(response.code());
-        Assert.assertEquals(response.code(), 500,"Must be 500");
+        Assert.assertEquals(response.code(), 400, "Must be");
     }
+
     @Test
     public void addNewContactNegative_WrongKeyAdress_ApiTest() {
         Contact contact = positiveContact();
@@ -318,11 +324,39 @@ public class AddNewContactApiTests implements BaseApi {
         try {
             response = OK_HTTP_CLIENT.newCall(request)
                     .execute();
+            softAssert.assertEquals(response.code(), 400, "validate status code");
+            ResponseMessageDto responseMessageDto = GSON.fromJson(response.body().string(), ResponseMessageDto.class);
+            System.out.println(responseMessageDto);
+            softAssert.assertTrue(responseMessageDto.getMessage().contains("   "), "validate code");
+            softAssert.assertAll();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         System.out.println(contact);
-        System.out.println(response.code());
-        Assert.assertEquals(response.code(), 500,"Must be 500");
     }
-}
+
+
+        @Test
+        public void addNewContactPositiveApiTestWith() {
+            Contact contact = Contact.builder()
+
+            RequestBody requestBody = RequestBody
+                    .create(GSON.toJson(contact), JSON);
+            Request request = new Request.Builder()
+                    .url(BASE_URL + ADD_NEW_CONTACT_URL)
+                    .addHeader(AUTH, token.getToken())
+                    .post(requestBody)
+                    .build();
+            Response response;
+            try {
+                response = OK_HTTP_CLIENT.newCall(request)
+                        .execute();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Assert.assertEquals(response.code(), 200);
+        }
+    }
+
+
+
